@@ -122,7 +122,7 @@ public class Settings implements PersistentStateComponent<Settings> {
                 "readserviceImpl", "writeservice","writeserviceImpl", "controller"));
 
         //todo: 添加模板
-        this.frontTemplateGroupMap.put(FRONT_DEFAULT_NAME,loadFrontTemplateGroup(FRONT_DEFAULT_NAME,"api","store","renrenfastComponent","renrenfastAddorUpdateComponent"));
+        this.frontTemplateGroupMap.put(FRONT_DEFAULT_NAME,loadFrontTemplateGroup(FRONT_DEFAULT_NAME,"api","store","renrenfastComponent","renrenfastAddorUpdateComponent","renrenfastTest"));
 
         //配置默认类型映射
         if (this.typeMapperGroupMap == null) {
@@ -162,7 +162,7 @@ public class Settings implements PersistentStateComponent<Settings> {
         if (this.globalConfigGroupMap == null) {
             this.globalConfigGroupMap = new LinkedHashMap<>();
         }
-        this.globalConfigGroupMap.put(DEFAULT_NAME, loadGlobalConfigGroup(DEFAULT_NAME, "init", "define", "autoImport", "mybatisSupport"));
+        this.globalConfigGroupMap.put(DEFAULT_NAME, loadGlobalConfigGroup(DEFAULT_NAME, "init", "define", "autoImport", "mybatisSupport","formItem"));
     }
 
     /**

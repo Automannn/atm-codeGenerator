@@ -20,7 +20,7 @@ public class $!{tableInfo.name} implements Serializable {
     * ${column.comment}
     */#end
 
-    private $!{tool.getClsNameByFullName($column.type)} $!{column.name};
+    private $!{tool.getClsNameByFullName($column.type)} $!{column.targetName};
 #end
 
 #foreach($column in $tableInfo.fullColumn)

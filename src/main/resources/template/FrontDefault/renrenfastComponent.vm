@@ -1,3 +1,6 @@
+##引入表单控件辅助生成
+$!formItem
+
 ##定义初始变量
 #set($tableName = $!tool.firstLowerCase($!{tableInfo.name}))
 #set($fileName = $!tableName)
@@ -14,10 +17,12 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
     <div class="mod-$tableName">
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
             <el-form-item>
-                #foreach($column in $tableInfo.fullColumn)
-                    <el-form-item label="$column.comment" prop="$column.name">
-                        <el-input v-model="dataForm.$column.name"></el-input>
-                    </el-form-item>
+                #foreach($column in $tableInfo.otherColumn)
+                    #if($column.hidden=='0')
+                        <el-form-item label="$column.labelName" prop="$column.targetName">
+                            #generateFormItemForRenRen($column)
+                        </el-form-item>
+                    #end
                 #end
             </el-form-item>
         </el-form>
@@ -41,12 +46,14 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
             </el-table-column>
 
             #foreach($column in $tableInfo.fullColumn)
-                <el-table-column
-                        prop="$!{column.name}"
-                        header-align="center"
-                        align="center"
-                        label="$!{column.comment}">
-                </el-table-column>
+                #if(${column.hidden}=='0')
+                    <el-table-column
+                            prop="$!{column.targetName}"
+                            header-align="center"
+                            align="center"
+                            label="$!{column.labelName}">
+                    </el-table-column>
+                #end
             #end
             <el-table-column
                     fixed="right"
@@ -55,8 +62,8 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                     width="150"
                     label="操作">
                 <template slot-scope="scope">
-                    <el-button v-if="isAuth('business:$tableName:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.name})">修改</el-button>
-                    <el-button v-if="isAuth('business:$tableName:delete')" type="text" size="small" @click="deleteHandle(scope.row.${pk.name})">删除</el-button>
+                    <el-button v-if="isAuth('business:$tableName:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.targetName})">修改</el-button>
+                    <el-button v-if="isAuth('business:$tableName:delete')" type="text" size="small" @click="deleteHandle(scope.row.${pk.targetName})">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -81,7 +88,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
             return {
                 dataForm: {
                     #foreach($column in $tableInfo.fullColumn)
-                        $!{column.name}:''#if( $foreach.hasNext), $!{nothing} #end
+                        $!{column.targetName}:''#if( $foreach.hasNext), $!{nothing} #end
                     #end
                 }$!{nothing},
                 dataList: [],
@@ -104,7 +111,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
             reset(){
                 this.dataForm = {
                 #foreach($column in $tableInfo.fullColumn)
-                    $!{column.name}:''#if( $foreach.hasNext), $!{nothing} #end
+                    $!{column.targetName}:''#if( $foreach.hasNext), $!{nothing} #end
                 #end
             }$!{nothing}
             },
@@ -155,7 +162,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
             // 删除
              deleteHandle (id) {
                  var ids = id ? [id] : this.dataListSelections.map(item => {
-                     return item.${pk.name}
+                     return item.${pk.targetName}
                  })
                  this.$confirm$!{nothing}(`确定对[id=${ids.join(',')}]进行[`+(id? '删除' : '批量删除')+"]操作?", '提示', {
                      confirmButtonText: '确定',

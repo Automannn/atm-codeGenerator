@@ -151,7 +151,7 @@ public final class CloneUtils {
         for (ColumnInfo oldColumnInfo : oldColumnInfoList) {
             for (ColumnInfo newColumnInfo : newColumnInfoList) {
                 // 对相同的列信息忽略复制
-                if (Objects.equals(oldColumnInfo.getName(), newColumnInfo.getName())) {
+                if (Objects.equals(oldColumnInfo.getSrcName(), newColumnInfo.getSrcName())) {
                     copyIgnoreProp(oldColumnInfo, newColumnInfo);
                     break;
                 }

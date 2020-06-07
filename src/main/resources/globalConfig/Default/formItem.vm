@@ -1,0 +1,65 @@
+##（Velocity宏定义） -->生成 formItem 表单元素
+
+## 根据传入的列信息，生成表单元素  适用于renrenFast
+#macro(generateFormItemForRenRen $column)
+    #if($column.formItemType=="1")##文本输入
+        <el-input v-model="dataForm.${column.targetName}"></el-input>
+    #elseif($column.formItemType=="2")##数字输入
+        <el-input-number style="width: 100%;text-align: left"
+                         controls-position="right"
+                         :min="1" :max="999999"
+                         :precision="2" :step="0.1"
+                         v-model="dataForm.${column.targetName}"></el-input-number>
+    #elseif($column.formItemType=="3") ##下拉选择
+        <el-select style="width: 100%" v-model="dataForm.${column.targetName}">
+            ##暂时只支持静态源
+            #if($column.formItemSourceType=='1')
+                <el-option
+                        v-for="item in ${column.formItemSource}"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            #end
+        </el-select>
+    #elseif($column.formItemType=="4") ##日期时间
+        <el-date-picker
+                style="width: 100%"
+                #if(${column.ext.valueFormat}!="")
+                    value-format="${column.ext.valueFormat}"
+                #else
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                #end
+
+                #if(${column.ext.format}!="")
+                    format="${column.ext.format}"
+                #else
+                    format="yyyy-MM-dd HH:mm:ss"
+                #end
+                v-model="dataForm.${column.targetName}"
+                type="datetime"
+                placeholder="选择日期时间"
+                align="right">
+        </el-date-picker>
+    #elseif($column.formItemType=="5") ##单选
+        <el-radio-group v-model="dataForm.${column.targetName}" style="width:100%">
+            ##暂时只支持静态源
+            #if($column.formItemSourceType=='1')
+                <el-radio
+                        v-for="item in ${column.formItemSource}"
+                        :label="item.value">item.label</el-radio>
+            #end
+        </el-radio-group>
+    #elseif($column.formItemType=="6") ##多选
+        <el-checkbox-group v-model="dataForm.${column.targetName}" style="width: 100%">
+            ##暂时只支持静态源
+            #if($column.formItemSourceType=='1')
+                <el-checkbox v-for="item in ${column.formItemSource}"
+                             :label="item.value"></el-checkbox>
+            #end
+        </el-checkbox-group>
+    #else
+        <el-input v-model="dataForm.${column.targetName}"></el-input>
+    #end
+#end
+

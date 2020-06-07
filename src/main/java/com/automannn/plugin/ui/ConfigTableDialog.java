@@ -142,9 +142,17 @@ public class ConfigTableDialog extends JDialog {
         //追加数据
         tableInfo.getFullColumn().forEach(columnInfo -> {
             List<Object> dataList = new ArrayList<>();
-            dataList.add(columnInfo.getName());
+            dataList.add(columnInfo.getSrcName());
+            dataList.add(columnInfo.getTargetName());
             dataList.add(columnInfo.getType());
             dataList.add(columnInfo.getComment());
+            dataList.add(columnInfo.getLabelName());
+            dataList.add(columnInfo.getFormItemType());
+            dataList.add(columnInfo.getFormItemSourceType());
+            dataList.add(columnInfo.getFormItemSource());
+            dataList.add(columnInfo.getFormItemRules());
+            dataList.add(columnInfo.getRequire());
+            dataList.add(columnInfo.getHidden());
             //渲染附加数据
             if (columnInfo.getExt() != null && !columnInfo.getExt().isEmpty()) {
                 // 跳过默认的3条数据
@@ -170,23 +178,47 @@ public class ConfigTableDialog extends JDialog {
             ColumnInfo columnInfo = tableInfo.getFullColumn().get(row);
             if (column == 0) {
                 for (ColumnInfo info : tableInfo.getFullColumn()) {
-                    if (info.getName().equals(val) && !info.getName().equals(columnInfo.getName())) {
+                    if (info.getSrcName().equals(val) && !info.getSrcName().equals(columnInfo.getSrcName())) {
                         Messages.showWarningDialog("Column Name Already exist!", MsgValue.TITLE_INFO);
                         // 输入的名称已经存在时，直接还原
-                        tableModel.setValueAt(columnInfo.getName(), row, column);
+                        tableModel.setValueAt(columnInfo.getSrcName(), row, column);
                         return;
                     }
                 }
             }
             switch (column) {
                 case 0:
-                    columnInfo.setName((String) val);
+                    columnInfo.setSrcName((String) val);
                     break;
                 case 1:
+                    columnInfo.setTargetName((String) val);
+                case 2:
                     columnInfo.setType((String) val);
                     break;
-                case 2:
+                case 3:
                     columnInfo.setComment((String) val);
+                    break;
+                case 4:
+                    columnInfo.setLabelName((String) val);
+                    break;
+                case 5:
+                    columnInfo.setFormItemType((String) val);
+                    break;
+                case 6:
+                    columnInfo.setFormItemSourceType((String) val);
+                    break;
+                case 7:
+                    columnInfo.setFormItemSource((String) val);
+                    break;
+                case 8:
+                    columnInfo.setFormItemRules((String) val);
+                    break;
+                case 9:
+                    columnInfo.setRequire((String) val);
+                    break;
+
+                case 10:
+                    columnInfo.setHidden((String) val);
                     break;
                 default:
                     if (columnInfo.getExt() == null) {
@@ -216,7 +248,7 @@ public class ConfigTableDialog extends JDialog {
                         return false;
                     }
                     for (ColumnInfo columnInfo : tableInfo.getFullColumn()) {
-                        if (columnInfo.getName().equals(inputString)) {
+                        if (columnInfo.getSrcName().equals(inputString)) {
                             return false;
                         }
                     }
@@ -234,7 +266,7 @@ public class ConfigTableDialog extends JDialog {
             }
 
             ColumnInfo columnInfo = new ColumnInfo();
-            columnInfo.setName(value);
+            columnInfo.setSrcName(value);
             columnInfo.setType("java.lang.String");
             // 标记为自定义列
             columnInfo.setCustom(true);
@@ -291,9 +323,17 @@ public class ConfigTableDialog extends JDialog {
      */
     private List<ColumnConfig> getInitColumn(List<ColumnConfig> columnConfigList) {
         List<ColumnConfig> result = new ArrayList<>();
-        result.add(new ColumnConfig("name", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("srcName", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("targetName", ColumnConfigType.TEXT));
         result.add(new ColumnConfig("type", ColumnConfigType.TEXT));
         result.add(new ColumnConfig("comment", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("labelName", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("formItemType", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("formItemSourceType", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("formItemSource", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("formItemRules", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("require", ColumnConfigType.TEXT));
+        result.add(new ColumnConfig("hidden", ColumnConfigType.TEXT));
         result.addAll(columnConfigList);
         return result;
     }

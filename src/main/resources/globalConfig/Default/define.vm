@@ -29,11 +29,11 @@
 ##定义GET，SET方法的宏定义，调用方式：#getSetMethod($column)
 #macro(getSetMethod $column)
 
-    public $!{tool.getClsNameByFullName($column.type)} get$!{tool.firstUpperCase($column.name)}() {
-        return $!{column.name};
+    public $!{tool.getClsNameByFullName($column.type)} get$!{tool.firstUpperCase($column.targetName)}() {
+        return $!{column.targetName};
     }
 
-    public void set$!{tool.firstUpperCase($column.name)}($!{tool.getClsNameByFullName($column.type)} $!{column.name}) {
-        this.$!{column.name} = $!{column.name};
+    public void set$!{tool.firstUpperCase($column.targetName)}($!{tool.getClsNameByFullName($column.type)} $!{column.targetName}) {
+        this.$!{column.targetName} = $!{column.targetName};
     }
 #end

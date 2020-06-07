@@ -1,3 +1,6 @@
+##引入表单控件辅助生成
+$!formItem
+
 ##定义初始变量
 #set($tableName = $!tool.firstLowerCase($!{tableInfo.name}))
 #set($fileName = $tool.append($tableName, "-add-or-update"))
@@ -12,20 +15,20 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
 
 <template>
     <el-dialog
-            :title="!dataForm.${pk.name} ? '新增' : '修改'"
+            :title="!dataForm.${pk.targetName} ? '新增' : '修改'"
             :close-on-click-modal="false"
             :visible.sync="visible">
         <el-form refs="dataForm" :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-            #foreach($column in $tableInfo.fullColumn)
-                <el-form-item label="$column.comment" prop="$column.name" :class="{ 'is-required': !dataForm.${pk.name} }">
-                    <el-input v-model="dataForm.$column.name"></el-input>
+            #foreach($column in $tableInfo.otherColumn)
+                <el-form-item v-show="${column.hidden}=='0'" label="$column.labelName" prop="$column.targetName" :class="{ 'is-required': ${column.require}=='1' }">
+                    #generateFormItemForRenRen($column)
                 </el-form-item>
             #end
         </el-form>
         <span slot="footer" class="dialog-footer">
-      <el-button @click="fnClose()">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
+          <el-button @click="fnClose()">取消</el-button>
+          <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+        </span>
     </el-dialog>
 </template>
 
@@ -37,10 +40,20 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                 roleList: [],
                 dataForm: {
                     #foreach($column in $tableInfo.fullColumn)
-                        $!{column.name}:''#if( $foreach.hasNext), $!{nothing} #end
+                        $!{column.targetName}:''#if( $foreach.hasNext), $!{nothing} #end
                     #end
                 }$!{nothing},
                 dataRule: {
+                    #foreach($column in $tableInfo.otherColumn)
+                        $column.targetName:
+                            [#if($column.require=='1')
+                                    { required: true, message: '${column.labelName}为必填项', trigger: 'blur' },
+                            #end
+                            ##暂不支持更高级的验证方式
+                            #if($column.formItemRules=="-1")
+
+                            #end],
+                    #end
                 }
             }
         },
@@ -53,9 +66,9 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                 //show the modal view
                 this.visible=true
                 //created by parent component; used to load the data that is operating now
-                this.dataForm.${pk.name} = id || 0
+                this.dataForm.${pk.targetName} = id || 0
                 //if the current id equals zero,then do nothing,which means the id is greater than zero
-                if (this.dataForm.${pk.name}) {
+                if (this.dataForm.${pk.targetName}) {
                    this.$http({
                         url: this.$http.$!{nothing}adornUrl('/business/${tableName}/'+id),
                         method: 'get',
@@ -63,7 +76,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                    }).then(({data}) => {
                         if (data && data.code === 0) {
                             #foreach($column in $tableInfo.fullColumn)
-                               this.dataForm.$!{column.name}= data.${tableName}.$!{column.name}
+                               this.dataForm.$!{column.targetName}= data.${tableName}.$!{column.targetName}
                             #end
                         }
                    })
@@ -79,10 +92,10 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                     if (valid) {
                         this.$http({
                             url: this.$http.$!{nothing}adornUrl('/business/${tableName}'),
-                            method: !this.dataForm.${pk.name} ? 'post' : 'put',
+                            method: !this.dataForm.${pk.targetName} ? 'post' : 'put',
                             data: this.$http.$!{nothing}adornData({
                                     #foreach($column in $tableInfo.fullColumn)
-                                        $!{column.name}:this.dataForm.$!{column.name},$!{nothing}
+                                        $!{column.targetName}:this.dataForm.$!{column.targetName},$!{nothing}
                                     #end
                             }$!{nothing})
                     }).then(({data}) => {

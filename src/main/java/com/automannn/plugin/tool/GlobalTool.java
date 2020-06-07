@@ -373,6 +373,6 @@ public class GlobalTool extends NameUtils {
      * @return
      */
    public String getKeyObj(List<ColumnInfo> list){
-        return "{"+list.stream().map(columnInfo -> columnInfo.getName()).collect(Collectors.joining(","))+"}";
+        return "{"+list.stream().map(columnInfo -> columnInfo.getSrcName()).collect(Collectors.joining(","))+"}";
     }
 }

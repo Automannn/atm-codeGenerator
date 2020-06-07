@@ -1,5 +1,8 @@
 package com.automannn.plugin.service.impl;
 
+import com.automannn.plugin.constants.FormItemRule;
+import com.automannn.plugin.constants.FormItemSourceType;
+import com.automannn.plugin.constants.FormItemType;
 import com.automannn.plugin.constants.MsgValue;
 import com.automannn.plugin.entity.ColumnInfo;
 import com.automannn.plugin.entity.SaveFile;
@@ -90,10 +93,26 @@ public class TableInfoServiceImpl implements TableInfoService {
             columnInfo.setType(getColumnType(column.getDataType().getSpecification()));
             // 短类型
             columnInfo.setShortType(nameUtils.getClsNameByFullName(columnInfo.getType()));
-            // 列名
-            columnInfo.setName(nameUtils.getJavaName(column.getName()));
+            // 原始列名
+            columnInfo.setSrcName(nameUtils.getJavaName(column.getName()));
+            //转化列名
+            columnInfo.setTargetName(nameUtils.getJavaName(column.getName()));
             // 列注释
             columnInfo.setComment(column.getComment());
+            //标签名
+            columnInfo.setLabelName(column.getComment());
+            //表单数据类型
+            columnInfo.setFormItemType(FormItemType.INPUT.getValue());
+            //表单数据源类型
+            columnInfo.setFormItemSourceType(FormItemSourceType.STATIC.getValue());
+            //表单数据源
+            columnInfo.setFormItemSource("[{label:'label',value:'value'}]");
+            //表单验证规则
+            columnInfo.setFormItemRules(FormItemRule.NONE.getValue());
+            //是否必填
+            columnInfo.setRequire("1");
+            //是否隐藏
+            columnInfo.setHidden("0");
             // 扩展项
             columnInfo.setExt(new LinkedHashMap<>());
             // 添加到全部列
@@ -162,7 +181,7 @@ public class TableInfoServiceImpl implements TableInfoService {
         for (ColumnInfo column : tableInfo.getFullColumn()) {
             boolean exists = false;
             for (ColumnInfo configColumn : tableInfoConfig.getFullColumn()) {
-                if (Objects.equals(configColumn.getName(), column.getName())) {
+                if (Objects.equals(configColumn.getSrcName(), column.getSrcName())) {
                     exists = true;
                     // 覆盖空值
                     if (configColumn.getType() == null) {
@@ -282,7 +301,7 @@ public class TableInfoServiceImpl implements TableInfoService {
             while (oldColumnIterable.hasNext()) {
                 ColumnInfo oldColumnInfo = oldColumnIterable.next();
                 // 不同列直接返回跳过
-                if (!Objects.equals(columnInfo.getName(), oldColumnInfo.getName())) {
+                if (!Objects.equals(columnInfo.getSrcName(), oldColumnInfo.getSrcName())) {
                     continue;
                 }
                 // 类型排除

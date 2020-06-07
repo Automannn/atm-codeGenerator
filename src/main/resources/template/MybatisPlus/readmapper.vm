@@ -14,9 +14,9 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper/rea
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="$!{tableInfo.savePackageName}.dao.read.$!{tableInfo.name}ReadDao">
 
-    <resultMap type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.name}" id="$!{tableInfo.name}Map">
+    <resultMap type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.targetName}" id="$!{tableInfo.name}Map">
 #foreach($column in $tableInfo.fullColumn)
-        <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
+        <result property="$!column.targetName" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
 #end
     </resultMap>
 </mapper>
