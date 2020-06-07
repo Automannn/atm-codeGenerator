@@ -1,0 +1,7 @@
+<project>
+  <component name="ExternalProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/codegeneratorTest.iml" filepath="$PROJECT_DIR$/codegeneratorTest.iml" />
+    </modules>
+  </component>
+</project>

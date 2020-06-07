@@ -1,0 +1,11 @@
+##定义初始变量
+#set($tableName = $tool.append($tableInfo.name, "Router"))
+##设置回调
+$!callback.setFileName($tool.append($tableName, ".js"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/app/router"))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+## 组件内容部分
+##todo: 完善模板

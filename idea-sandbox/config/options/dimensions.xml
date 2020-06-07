@@ -1,0 +1,17 @@
+<application>
+  <component name="DimensionService">
+    <location key="new project wizard.0.0.1920.1080@120dpi" x="231" y="0" />
+    <location key="WELCOME_SCREEN.0.0.1920.1080@120dpi" x="969" y="449" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.1920.1080@120dpi" x="510" y="300" />
+    <location key="ProcessPopupWindow.0.0.1920.1080@120dpi" x="1309" y="838" />
+    <location key="#com.intellij.execution.impl.EditConfigurationsDialog.0.0.1920.1080@120dpi" x="385" y="75" />
+    <location key="SettingsEditor.0.0.1920.1080@120dpi" x="254" y="0" />
+    <location key="#com.intellij.ide.util.PackageChooserDialog.0.0.1920.1080@120dpi" x="558" y="224" />
+    <location key="IDE.errors.dialog.0.0.1920.1080@120dpi" x="369" y="158" />
+    <location key="FileChooserDialogImpl.0.0.1920.1080@120dpi" x="686" y="214" />
+    <size key="ProcessPopupWindow.0.0.1920.1080@120dpi" width="500" height="149" />
+    <size key="HiddenNamespacesPopup.0.0.1920.1080@120dpi" width="265" height="600" />
+    <size key="IDE.errors.dialog.0.0.1920.1080@120dpi" width="1048" height="805" />
+    <size key="SettingsEditor.0.0.1920.1080@120dpi" width="1449" height="887" />
+  </component>
+</application>

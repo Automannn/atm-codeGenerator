@@ -1,0 +1,121 @@
+##定义初始变量
+#set($tableName = $tool.append($tableInfo.name, "Api"))
+#set($tableResource = $tool.append($tableInfo.name, "s"))
+##设置回调
+$!callback.setFileName($tool.append($tableName, ".js"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/app/api"))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+## 组件内容部分
+
+import axios from '@/libs/api.request'
+
+## 新增api
+export const add$!{tableResource} = ({
+    #foreach($column in $tableInfo.fullColumn)
+        $!{column.name}#if( $foreach.hasNext),#end
+    #end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+    return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)',
+        data,
+        method: 'post'
+    })
+}
+
+## 修改api
+export const update$!{tableResource} = ({
+    #foreach($column in $tableInfo.fullColumn)
+        $!{column.name}#if( $foreach.hasNext),#end
+    #end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+    return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)/$!pk',
+        data,
+        method: 'put'
+    })
+}
+
+## 逻辑删除 api
+export const delete$!{tableResource} = ({
+    #foreach($column in $tableInfo.fullColumn)
+        $!{column.name}#if( $foreach.hasNext),#end
+    #end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+    return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)/$!pk',
+        data,
+        method: 'patch'
+    })
+}
+
+## 物理删除 api
+export const delete0$!{tableResource} = ({
+    #foreach($column in $tableInfo.fullColumn)
+        $!{column.name}#if( $foreach.hasNext),#end
+    #end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+    return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)/$!pk',
+        data,
+        method: 'delete'
+    })
+}
+
+## 简单查询 api
+export const get$!{tableResource} = ({
+#foreach($column in $tableInfo.fullColumn)
+    $!{column.name}#if( $foreach.hasNext),#end
+#end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+    return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)/$!pk',
+        data,
+        method: 'get'
+    })
+}
+
+## 复杂查询 api
+export const query$!{tableResource} = ({
+    #foreach($column in $tableInfo.fullColumn)
+        $!{column.name}#if( $foreach.hasNext),#end
+    #end
+})=>{
+    const data = {
+        #foreach($column in $tableInfo.fullColumn)
+            $!{column.name}#if( $foreach.hasNext),#end
+        #end
+    }
+        return axios.request({
+        url: '$!tool.firstLowerCase($tableResource)',
+        data,
+        method: 'post'
+    })
+}

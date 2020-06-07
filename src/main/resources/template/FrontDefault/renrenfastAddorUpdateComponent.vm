@@ -1,0 +1,110 @@
+##定义初始变量
+#set($tableName = $!tool.firstLowerCase($!{tableInfo.name}))
+#set($fileName = $tool.append($tableName, "-add-or-update"))
+##设置回调
+$!callback.setFileName($tool.append($fileName, ".vue"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/business"))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+## 组件内容部分
+
+<template>
+    <el-dialog
+            :title="!dataForm.${pk.name} ? '新增' : '修改'"
+            :close-on-click-modal="false"
+            :visible.sync="visible">
+        <el-form refs="dataForm" :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+            #foreach($column in $tableInfo.fullColumn)
+                <el-form-item label="$column.comment" prop="$column.name" :class="{ 'is-required': !dataForm.${pk.name} }">
+                    <el-input v-model="dataForm.$column.name"></el-input>
+                </el-form-item>
+            #end
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+      <el-button @click="fnClose()">取消</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+    </span>
+    </el-dialog>
+</template>
+
+<script>
+    export default {
+        data () {
+            return {
+                visible: false,
+                roleList: [],
+                dataForm: {
+                    #foreach($column in $tableInfo.fullColumn)
+                        $!{column.name}:''#if( $foreach.hasNext), $!{nothing} #end
+                    #end
+                }$!{nothing},
+                dataRule: {
+                }
+            }
+        },
+        methods: {
+            fnClose () {
+                this.visible = false
+                this.resetData()
+            },
+            init (id) {
+                //show the modal view
+                this.visible=true
+                //created by parent component; used to load the data that is operating now
+                this.dataForm.${pk.name} = id || 0
+                //if the current id equals zero,then do nothing,which means the id is greater than zero
+                if (this.dataForm.${pk.name}) {
+                   this.$http({
+                        url: this.$http.$!{nothing}adornUrl('/business/${tableName}/'+id),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                   }).then(({data}) => {
+                        if (data && data.code === 0) {
+                            #foreach($column in $tableInfo.fullColumn)
+                               this.dataForm.$!{column.name}= data.${tableName}.$!{column.name}
+                            #end
+                        }
+                   })
+                }
+            },
+            // 重置数据
+            resetData () {
+                this.$refs.dataForm.resetFields()
+            },
+            // 表单提交
+            dataFormSubmit () {
+                this.$refs['dataForm'].$!{nothing}validate((valid) => {
+                    if (valid) {
+                        this.$http({
+                            url: this.$http.$!{nothing}adornUrl('/business/${tableName}'),
+                            method: !this.dataForm.${pk.name} ? 'post' : 'put',
+                            data: this.$http.$!{nothing}adornData({
+                                    #foreach($column in $tableInfo.fullColumn)
+                                        $!{column.name}:this.dataForm.$!{column.name},$!{nothing}
+                                    #end
+                            }$!{nothing})
+                    }).then(({data}) => {
+                        if (data && data.code === 0) {
+                            this.$emit('refreshDataList')
+                            this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: 1500,
+                            onClose: () => {
+                            }})
+                        } else {
+                            this.$message.$!{nothing}error(data.msg)
+                        }
+                    })
+                        this.visible = false
+                        this.resetData()
+                    }
+                })
+            }
+        }
+    }
+</script>
+
+

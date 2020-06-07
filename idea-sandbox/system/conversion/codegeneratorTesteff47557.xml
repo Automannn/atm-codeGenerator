@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conversion>
+  <applied-converters>
+    <converter id="DockerRunConfigurationConverterProvider" />
+    <converter id="android-module-to-java-module" />
+    <converter id="android-proguard-options" />
+    <converter id="android-sdk-library" />
+    <converter id="google-app-engine-facet" />
+    <converter id="js-debug-configuration-converter" />
+    <converter id="js-predefined-libraries-merged" />
+    <converter id="junit-to-android-junit-configurations" />
+    <converter id="kotlin-non-jvm-source-roots" />
+  </applied-converters>
+  <project-files>
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\compiler.xml" timestamp="1591447333127" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\dataSources.local.xml" timestamp="1591447333168" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\dataSources.xml" timestamp="1591447333158" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\dataSources\296810fc-98e9-41cc-87bd-45011f9e5569.xml" timestamp="1591447354630" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\dataSources\9ca870c5-0ea8-437b-bbc4-3675f5bf3e4f.xml" timestamp="1591447092527" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\misc.xml" timestamp="1590484823473" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\modules.xml" timestamp="1590414133529" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\.idea\workspace.xml" timestamp="1591447333097" />
+    <file path="C:\Users\14394\IdeaProjects\codegeneratorTest\front-test\front-test.iml" timestamp="1590414133362" />
+  </project-files>
+</conversion>
+

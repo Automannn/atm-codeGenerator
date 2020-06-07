@@ -1,0 +1,118 @@
+##定义初始变量
+#set($tableName = $tool.append($tableInfo.name, "Store"))
+#set($tableResource = $tool.append($tableInfo.name, "s"))
+#set($tableKeyObj = $tool.getKeyObj($tableInfo.fullColumn))
+##设置回调
+$!callback.setFileName($tool.append($tableName, ".js"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/app/store/module"))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+## 组件内容部分
+
+import {
+    add$!{tableResource},
+    update$!{tableResource},
+    delete$!{tableResource},
+    delete0$!{tableResource},
+    get$!{tableResource},
+    query$!{tableResource}
+} from '@/api/$!{tableInfo.name}Api'
+
+export default {
+    state: {
+        ##实体
+        $!{tableInfo.name}: {},
+        ## 用于限定当前页数据是否需要刷新
+        needFlush:false
+        ##注意,store中不提供列表操作，列表操作输入业务范畴，在组件中实现
+    },
+    getters:{},
+    ## 注意，这是修改 store状态的唯一 方式
+    mutations: {
+        commitChange(data:{
+            #foreach($column in $tableInfo.fullColumn)
+                $!{column.name}#if( $foreach.hasNext),#end
+            #end
+        },flag){
+            ## flag 表示 是否全部 更新
+            if(flag){
+                state.$!{tableInfo.name} = data
+            }else{
+                Object.assign(state.$!{tableInfo.name},data)
+            }
+        },
+        commitFlush(){
+            state.needFlush = true
+        },
+        cancelFlush(){
+            state.needFlush = false
+        }
+    },
+    actions: {
+        add$!{tableResource}({ commit }, data:$tableKeyObj){
+            return new Promise((resolve, reject) => {
+                add$!{tableResource}(data).then(res => {
+                    commit('commitFlush')
+                    resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        update$!{tableResource}({ commit }, data:$tableKeyObj){
+            return new Promise((resolve, reject) => {
+                update$!{tableResource}(data).then(res => {
+                    commit('commitFlush')
+                    resolve()
+                    }).catch(err => {
+                    reject(err)
+                    })
+            })
+        },
+        delete$!{tableResource}({ commit }, data:$tableKeyObj){
+            return new Promise((resolve, reject) => {
+                delete$!{tableResource}(data).then(res => {
+                    commit('commitFlush')
+                    resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        delete0$!{tableResource}({ commit }, data:$tableKeyObj){
+            return new Promise((resolve, reject) => {
+                delete0$!{tableResource}(data).then(res => {
+                    commit('commitFlush')
+                    resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        get$!{tableResource}({ commit }, data:$tableKeyObj){
+                return new Promise((resolve, reject) => {
+                    get$!{tableResource}(data).then(res => {
+                        commit('commitChange',res.data.$!{tableInfo.name})
+                        resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        query$!{tableResource}({ commit }, data:$tableKeyObj){
+            return new Promise((resolve, reject) => {
+                query$!{tableResource}(data).then(res => {
+                    commit('commitChange',res.data.$!{tableInfo.name})
+                    resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+    }
+
+}
+
+

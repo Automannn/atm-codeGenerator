@@ -1,0 +1,59 @@
+<idea-plugin>
+    <id>com.automannn.plugin.atm-codeGenerator</id>
+    <name>atmCodeGenerator</name>
+    <version>1.0</version>
+    <vendor email="automannn@163.com" url="http://www.automannn.cn">automannn's blog</vendor>
+
+    <description><![CDATA[
+      <tag>EasyCode,Easy Code,easy,code,code generate,code tools</tag>
+      <h3>English:</h3>
+      <ul>
+      <li>The code generation plug-in based on IntelliJ IDEA is developed to support custom templates (Java, HTML, JS, XML).</li>
+      <li>As long as database related code can be generated through custom templates. Support database type and Java type mapping relationship configuration.</li>
+      <li>The code that supports generating multiple tables at the same time. Each table has a separate configuration information. Full personalization definition, the rules are set by you.</li>
+      </ul>
+      <h3>中文：</h3>
+      <ul>
+      <li>基于IntelliJ IDEA开发的代码生成插件，支持自定义任意模板（Java，html，js，xml）。</li>
+      <li>只要是与数据库相关的代码都可以通过自定义模板来生成。支持数据库类型与java类型映射关系配置。</li>
+      <li>支持同时生成生成多张表的代码。每张表有独立的配置信息。完全的个性化定义，规则由你设置。</li>
+    ]]></description>
+
+
+    <change-notes><![CDATA[
+        源于数据海洋的easyCode1.2版本。暂未发生任何改变，针对个人需要做了一些简单的修改
+    ]]></change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="172"/>
+
+    <!--必须为企业版-->
+    <depends>com.intellij.modules.lang</depends>
+    <!--必须依赖Database Tool插件-->
+    <depends>com.intellij.database</depends>
+    <!--必须依赖Velocity插件-->
+    <depends>com.intellij.velocity</depends>
+
+    <!--扩展点-->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <!--实例化配置信息服务-->
+        <applicationService serviceImplementation="com.automannn.plugin.config.Settings"/>
+        <!--项目服务-->
+        <projectService serviceInterface="com.automannn.plugin.service.TableInfoService" serviceImplementation="com.automannn.plugin.service.impl.TableInfoServiceImpl"/>
+        <projectService serviceInterface="com.automannn.plugin.service.CodeGenerateService" serviceImplementation="com.automannn.plugin.service.impl.CodeGenerateServiceImpl"/>
+        <!--系统设置面板-->
+        <applicationConfigurable dynamic="true" instance="com.automannn.plugin.ui.MainSetting"/>
+
+        <velocity.globalVariableProvider implementation="com.automannn.plugin.provider.AutomannnGlobalVariableProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="com.automannn.code.action" class="com.automannn.plugin.actions.MainActionGroup" text="atmCodeGenerator" popup="true">
+            <!--生成代码菜单-->
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
+        </group>
+    </actions>
+
+</idea-plugin>

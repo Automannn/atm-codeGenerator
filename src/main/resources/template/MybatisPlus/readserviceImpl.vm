@@ -1,0 +1,24 @@
+##导入宏定义
+$!define
+
+##设置表后缀（宏定义）
+#setTableSuffix("ReadServiceImpl")
+
+##保存文件（宏定义）
+#save("/service/read/impl", "ReadServiceImpl.java")
+
+##包路径（宏定义）
+#setPackageSuffix("service.read.impl")
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import $!{tableInfo.savePackageName}.dao.read.$!{tableInfo.name}ReadDao;
+import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
+import $!{tableInfo.savePackageName}.service.read.$!{tableInfo.name}ReadService;
+import org.springframework.stereotype.Service;
+
+##表注释（宏定义）
+#tableComment("表服务实现类")
+@Service("$!tool.firstLowerCase($tableInfo.name)ReadService")
+public class $!{tableName} extends ServiceImpl<$!{tableInfo.name}ReadDao, $!{tableInfo.name}> implements $!{tableInfo.name}ReadService {
+
+}
