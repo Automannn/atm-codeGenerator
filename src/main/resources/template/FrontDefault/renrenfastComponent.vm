@@ -171,7 +171,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/views/modules/busines
                  }).then(() => {
                      this.$http({
                          url: this.$http.$!{nothing}adornUrl("/business/$tableName"),
-                         method: 'delete',
+                         method: 'patch',
                          data: this.$http.$!{nothing}adornData(ids, false)
                      }).then(({data}) => {
                          if (data && data.code === 0) {
